@@ -45,7 +45,7 @@ if ('development' == app.get('env')) {
 passport.use(new FacebookStrategy({
         clientID: FACEBOOK_APP_ID,
         clientSecret: FACEBOOK_APP_SECRET,
-        callbackURL: "http://localhost:3000/auth/facebook/callback"
+        callbackURL: "http://evening-caverns-1488.herokuapp.com/auth/facebook/callback"
     },
     function (accessToken, refreshToken, profile, done) {
 	process.nextTick(function () {
