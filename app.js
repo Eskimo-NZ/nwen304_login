@@ -16,6 +16,14 @@ var FACEBOOK_APP_SECRET = "ae1c43ba534dfdfe394c6e66e08dfcce";
 
 var app = express();
 
+// Database
+var pg = require('pg').native
+var connectionString = process.env.DATABASE_URL
+var port = process.env.PORT
+var client = new pg.Client(connectionString);
+
+client.connect();
+
 // all environments
 
 app.set('port', process.env.PORT || 3000);
