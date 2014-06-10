@@ -46,18 +46,25 @@ if ('development' == app.get('env')) {
 }
 
 passport.use(new FacebookStrategy({
-        clientID: FACEBOOK_APP_ID,
-        clientSecret: FACEBOOK_APP_SECRET,
-        callbackURL: "http://evening-caverns-1488.herokuapp.com/auth/facebook/callback"
-        //profileFields: ['id', 'displayName']
-    },
-    function (accessToken, refreshToken, profile, done) {
-	process.nextTick(function () {
-		console.log(profile);
-        	return done(null, profile);
-	});
-    }
-));
+  clientID: FACEBOOK_APP_ID,
+  clientSecret: FACEBOOK_APP_SECRET,
+  callbackURL: "http://evening-caverns-1488.herokuapp.com/auth/facebook/callback"
+},
+function (accessToken, refreshToken, profile, done) {
+  process.nextTick(function () {
+    console.log(profile);
+
+    // Add user to database
+    client.query("INSERT INTO logindatabase (id, points) VALUES ($1, $2)", [profile.id, '10']);
+    query = client.query("SELECT * FROM logindatabase");
+
+    query.on('row', function(result) {
+      console.log(result);
+    });
+
+    return done(null, profile);
+  });
+}));
 
 passport.serializeUser(function(user, done) {
   done(null, user);
