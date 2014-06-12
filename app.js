@@ -52,7 +52,7 @@ passport.use(new FacebookStrategy({
 },
 function (accessToken, refreshToken, profile, done) {
   process.nextTick(function () {
-    console.log("User ID: "+profile.id+", Name: "+name);
+    console.log("User ID: "+profile.id+", Name: "+profile.name);
     
     var query = client.query("SELECT * FROM logindatabase");
     
