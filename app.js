@@ -52,7 +52,7 @@ passport.use(new FacebookStrategy({
 },
 function (accessToken, refreshToken, profile, done) {
   process.nextTick(function () {
-    var user;
+    var existingUser = false;
     console.log("User ID: "+profile.id+", Name: "+profile.displayName);
     
     var query = client.query("SELECT * FROM logindatabase");
@@ -65,19 +65,18 @@ function (accessToken, refreshToken, profile, done) {
       console.log(result.rows.length + ' rows were received');
       for(var i = 0; i < result.rows.length; i++){
         if(result.rows[i].id == profile.id){
-          console.log(" - User found at index "+i);
-          user = profile;
+          console.log(" + User found at index "+i);
+          existingUser = true;
         }
       }
       
     });
-    console.log("----------- End of search");
 
-    if (user) {
-      console.log("User already exists");
-      return done(null, user);
+    if (existingUser) {
+      console.log(" - User already exists");
+      return done(null, profile);
     } else {
-      console.log("Making new user");
+      console.log(" - Making new user");
       return done(null, profile);
     }
   });
