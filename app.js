@@ -58,17 +58,11 @@ function (accessToken, refreshToken, profile, done) {
     //client.query("INSERT INTO logindatabase (id, points) VALUES ($1, $2)", [profile.id, '10']);
     query = client.query("SELECT * FROM logindatabase");
 
+    //query.on('row', function(row, result) {
+      //result.addRow(row);
+    //});
+
     query.on('row', function(row, result) {
-      result.addRow(row);
-    });
-    query.on('end', function(result) {
-      console.log(result.rows.length + ' rows were received');
-    });
-
-  /*
-    query = client.query("SELECT * FROM logindatabase");
-
-    query.on('row', function(result) {
       console.log(result);
       for(var i = 0; i < result.rows.length; i++){
         if(result.rows[i].id == profile.id){
