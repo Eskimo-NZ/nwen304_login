@@ -67,12 +67,14 @@ function (accessToken, refreshToken, profile, done) {
         if(result.rows[i].id == profile.id){
           console.log(" + User found at index "+i);
           existingUser = true;
+          console.log("ExistingUser in query = "+existingUser);
+          break;
         }
       }
       
     });
 
-    console.log("ExistingUser = "+existingUser);
+    console.log("ExistingUser outside query = "+existingUser);
     if (existingUser == true) {
       console.log(" - User already exists");
       return done(null, profile);
