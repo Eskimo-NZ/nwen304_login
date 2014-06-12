@@ -58,7 +58,7 @@ function (accessToken, refreshToken, profile, done) {
     
     query.on('row', function(row, result) {
       console.log(result.rows.length);
-    }
+    });
 
     return done(null, profile);
   });
