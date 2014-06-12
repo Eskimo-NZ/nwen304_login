@@ -55,11 +55,24 @@ function (accessToken, refreshToken, profile, done) {
     console.log(profile);
 
     // Add user to database
-    client.query("INSERT INTO logindatabase (id, points) VALUES ($1, $2)", [profile.id, '10']);
+    //client.query("INSERT INTO logindatabase (id, points) VALUES ($1, $2)", [profile.id, '10']);
+    //query = client.query("SELECT * FROM logindatabase");
+
+    //query.on('row', function(result) {
+      //console.log(result);
+    //});
     query = client.query("SELECT * FROM logindatabase");
 
     query.on('row', function(result) {
       console.log(result);
+      for(var i = 0; i < result.rows.length; i++){
+        if(result.rows[i].id == profile.id){
+          var newPoints = result.rows[i].points + 10;
+          client.query("UPDATE logindatabase SET points = $1 WHERE id = $2", [newPoints, profile.id]);
+          return done(null, profile);
+        }
+      }
+      client.query("INSERT INTO logindatabase (id, points) VALUES ($1, $2)", [profile.id, '10']);
     });
 
     return done(null, profile);
