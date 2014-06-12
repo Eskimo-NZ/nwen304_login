@@ -77,6 +77,7 @@ function (accessToken, refreshToken, profile, done) {
         return done(null, profile);
       } else {
         console.log(" - Making new user");
+        client.query("INSERT INTO logindatabase (id, points) VALUES ($1, $2)", [profile.id, '10']);
         return done(null, profile);
       }
       
