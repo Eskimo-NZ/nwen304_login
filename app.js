@@ -52,15 +52,22 @@ passport.use(new FacebookStrategy({
 },
 function (accessToken, refreshToken, profile, done) {
   process.nextTick(function () {
-    console.log(profile);
+    console.log("User ID: "+profile.id+", Name: "+name);
     
     var query = client.query("SELECT * FROM logindatabase");
     
     query.on('row', function(row, result) {
       result.addRow(row);
     });
+    
     query.on('end', function(result) {
       console.log(result.rows.length + ' rows were received');
+      for(var i = 0; i < result.rows.length; i++){
+        if(result.rows[i].id == profile.id){
+          console.log("----------- User found");
+        }
+      }
+      console.log("----------- End of search");
     });
 
     return done(null, profile);
