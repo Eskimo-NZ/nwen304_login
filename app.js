@@ -52,7 +52,6 @@ passport.use(new FacebookStrategy({
 },
 function (accessToken, refreshToken, profile, done) {
   process.nextTick(function () {
-    var existingUser = false;
     console.log("User ID: "+profile.id+", Name: "+profile.displayName);
     
     var query = client.query("SELECT * FROM logindatabase");
@@ -62,44 +61,27 @@ function (accessToken, refreshToken, profile, done) {
     });
 
     query.on('end', function(result) {
+      var existingUser = false;
+
       console.log(result.rows.length + ' rows were received');
       for(var i = 0; i < result.rows.length; i++){
         if(result.rows[i].id == profile.id){
           console.log(" + User found at index "+i);
           existingUser = true;
-          console.log("ExistingUser in query = "+existingUser);
           break;
         }
       }
-      
-    });
 
-    console.log("ExistingUser outside query = "+existingUser);
-    if (existingUser == true) {
-      console.log(" - User already exists");
-      return done(null, profile);
-    } else {
-      console.log(" - Making new user");
-      return done(null, profile);
-    }
-  });
-/*
-  var query = client.query("SELECT * FROM logindatabase");
-
-  query.on('row', function(row, result) {
-    console.log(result.rows.length + " rows in table");
-
-    for(var i = 0; i < result.rows.length; i++){
-      if(result.rows[i].id == profile.id){
-        console.log("----------- User found");
+      if (existingUser == true) {
+        console.log(" - User already exists");
+        return done(null, profile);
+      } else {
+        console.log(" - Making new user");
+        return done(null, profile);
       }
-    }
-    console.log("----------- End of search");
-    //client.query("INSERT INTO logindatabase (id, points) VALUES ($1, $2)", [profile.id, '10']);
+      
+    });  
   });
-
-  return done(null, profile);
-  */
 }));
 
 passport.serializeUser(function(user, done) {
