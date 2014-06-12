@@ -54,8 +54,8 @@ function (accessToken, refreshToken, profile, done) {
   process.nextTick(function () {
     console.log(profile);
   });
-  
-  query = client.query("SELECT * FROM logindatabase");
+
+  var query = client.query("SELECT * FROM logindatabase");
 
   query.on('row', function(row, result) {
     console.log(result.rows.length + " rows in table");
