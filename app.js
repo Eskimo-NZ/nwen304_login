@@ -60,7 +60,7 @@ function (accessToken, refreshToken, profile, done) {
 
     query.on('row', function(result) {
       console.log(result);
-      console.log(result.rows.length + ' rows were received');
+      console.log(result.length + ' rows were received');
     });
 
   /*
