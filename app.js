@@ -56,11 +56,14 @@ function (accessToken, refreshToken, profile, done) {
 
     // Add user to database
     //client.query("INSERT INTO logindatabase (id, points) VALUES ($1, $2)", [profile.id, '10']);
-    //query = client.query("SELECT * FROM logindatabase");
+    query = client.query("SELECT * FROM logindatabase");
 
-    //query.on('row', function(result) {
-      //console.log(result);
-    //});
+    query.on('row', function(result) {
+      console.log(result);
+      console.log(result.rows.length + ' rows were received');
+    });
+
+  /*
     query = client.query("SELECT * FROM logindatabase");
 
     query.on('row', function(result) {
@@ -74,6 +77,7 @@ function (accessToken, refreshToken, profile, done) {
       }
       client.query("INSERT INTO logindatabase (id, points) VALUES ($1, $2)", [profile.id, '10']);
     });
+*/
 
     return done(null, profile);
   });
