@@ -72,7 +72,7 @@ function (accessToken, refreshToken, profile, done) {
       
     });
 
-    if (existingUser) {
+    if (existingUser == true) {
       console.log(" - User already exists");
       return done(null, profile);
     } else {
