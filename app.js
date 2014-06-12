@@ -56,8 +56,11 @@ function (accessToken, refreshToken, profile, done) {
     
     var query = client.query("SELECT * FROM logindatabase");
     
+    query.on('row', function(row, result) {
+      result.addRow(row);
+    });
     query.on('end', function(result) {
-      console.log(result.length);
+      console.log(result.rows.length + ' rows were received');
     });
 
     return done(null, profile);
@@ -88,10 +91,6 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
-
-function addUser(profile) {
-  console.log("Function called");
-}
 
 app.get('/auth/facebook', passport.authenticate('facebook'));
 
