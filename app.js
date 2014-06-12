@@ -53,27 +53,23 @@ passport.use(new FacebookStrategy({
 function (accessToken, refreshToken, profile, done) {
   process.nextTick(function () {
     console.log(profile);
-
-    // Add user to database
-    //client.query("INSERT INTO logindatabase (id, points) VALUES ($1, $2)", [profile.id, '10']);
-    query = client.query("SELECT * FROM logindatabase");
-
-    query.on('row', function(row, result) {
-      console.log(result);
-      for(var i = 0; i < result.rows.length; i++){
-        if(result.rows[i].id == profile.id){
-          var newPoints = result.rows[i].points + 10;
-          client.query("UPDATE logindatabase SET points = $1 WHERE id = $2", [newPoints, profile.id]);
-          console.log("----------- User found");
-          return done(null, profile);
-        }
-      }
-      console.log("----------- User not found");
-      client.query("INSERT INTO logindatabase (id, points) VALUES ($1, $2)", [profile.id, '10']);
-    });
-
-    return done(null, profile);
   });
+  
+  query = client.query("SELECT * FROM logindatabase");
+
+  query.on('row', function(row, result) {
+    console.log(result.rows.length + " rows in table");
+
+    for(var i = 0; i < result.rows.length; i++){
+      if(result.rows[i].id == profile.id){
+        console.log("----------- User found");
+      }
+    }
+    console.log("----------- End of search");
+    //client.query("INSERT INTO logindatabase (id, points) VALUES ($1, $2)", [profile.id, '10']);
+  });
+
+  return done(null, profile);
 }));
 
 passport.serializeUser(function(user, done) {
