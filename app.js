@@ -53,8 +53,16 @@ passport.use(new FacebookStrategy({
 function (accessToken, refreshToken, profile, done) {
   process.nextTick(function () {
     console.log(profile);
-  });
+    
+    var query = client.query("SELECT * FROM logindatabase");
+    
+    query.on('row', function(row, result) {
+      console.log(result.rows.length);
+    }
 
+    return done(null, profile);
+  });
+/*
   var query = client.query("SELECT * FROM logindatabase");
 
   query.on('row', function(row, result) {
@@ -70,6 +78,7 @@ function (accessToken, refreshToken, profile, done) {
   });
 
   return done(null, profile);
+  */
 }));
 
 passport.serializeUser(function(user, done) {
@@ -79,6 +88,10 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
+
+function addUser(profile) {
+  console.log("Function called");
+}
 
 app.get('/auth/facebook', passport.authenticate('facebook'));
 
