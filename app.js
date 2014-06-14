@@ -34,6 +34,7 @@ app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
+app.use(express.session({ secret: 'anything' }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
@@ -87,10 +88,12 @@ function (accessToken, refreshToken, profile, done) {
 }));
 
 passport.serializeUser(function(user, done) {
+  console.log("Serialized User");
   done(null, user.id);
 });
 
 passport.deserializeUser(function(obj, done) {
+  console.log("Deserialized User");
   done(null, obj);
 });
 
