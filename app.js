@@ -34,6 +34,7 @@ app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
+app.use(express.session({ secret: 'keyboard cat' }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
@@ -87,7 +88,7 @@ function (accessToken, refreshToken, profile, done) {
 }));
 
 passport.serializeUser(function(user, done) {
-  done(null, user);
+  done(null, user.id);
 });
 
 passport.deserializeUser(function(obj, done) {
@@ -104,7 +105,7 @@ app.get('/auth/facebook/callback',
 );
 
 app.get('/success', function(req, res){
-	res.send("Success: Logged in with "+req.user.id);
+	res.send("Success: Logged in with "+req.user);
 });
 
 app.get('/error', function(req, res){
