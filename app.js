@@ -100,10 +100,10 @@ passport.deserializeUser(function(obj, done) {
 app.get('/auth/facebook', passport.authenticate('facebook'));
 
 app.get('/auth/facebook/callback', 
-	passport.authenticate('facebook', { 
-    successRedirect: '/success',
-    failureRedirect: '/error' 
-  })
+	passport.authenticate('facebook', { successRedirect: '/success', failureRedirect: '/error' }),
+  function(req, res) {
+    console.log("User: "+req.user);
+  }
 );
 
 app.get('/success', function(req, res){
