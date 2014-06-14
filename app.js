@@ -45,6 +45,7 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+// Facebook login
 passport.use(new FacebookStrategy({
   clientID: FACEBOOK_APP_ID,
   clientSecret: FACEBOOK_APP_SECRET,
@@ -96,11 +97,14 @@ passport.deserializeUser(function(obj, done) {
 app.get('/auth/facebook', passport.authenticate('facebook'));
 
 app.get('/auth/facebook/callback', 
-		  passport.authenticate('facebook', { successRedirect: '/success',
-			                                        failureRedirect: '/error' }));
+	passport.authenticate('facebook', { 
+    successRedirect: '/success',
+    failureRedirect: '/error' 
+  })
+);
 
 app.get('/success', function(req, res){
-	res.send("success logged in");
+	res.send("Success: Logged in with "+req.user.id);
 });
 
 app.get('/error', function(req, res){
