@@ -22,11 +22,6 @@ var client = new pg.Client(connectionString);
 
 client.connect();
 
-// development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
-}
-
 // Facebook login
 passport.use(new FacebookStrategy({
   clientID: FACEBOOK_APP_ID,
@@ -95,6 +90,10 @@ app.configure(function() {
   app.use(passport.session());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
+  // development only
+  if ('development' == app.get('env')) {
+    app.use(express.errorHandler());
+  }
 });
 
 app.get('/auth/facebook', passport.authenticate('facebook'));
