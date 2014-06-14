@@ -14,8 +14,6 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var FACEBOOK_APP_ID = "566740760110796"
 var FACEBOOK_APP_SECRET = "ae1c43ba534dfdfe394c6e66e08dfcce";
 
-var app = express();
-
 // Database
 var pg = require('pg').native;
 var connectionString = process.env.DATABASE_URL;
@@ -23,23 +21,6 @@ var port = process.env.PORT;
 var client = new pg.Client(connectionString);
 
 client.connect();
-
-// all environments
-
-app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-app.use(express.favicon());
-app.use(express.logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded());
-app.use(express.methodOverride());
-//app.use(express.session({ secret: 'anything' }));
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
-
 
 // development only
 if ('development' == app.get('env')) {
@@ -88,7 +69,7 @@ function (accessToken, refreshToken, profile, done) {
 }));
 
 passport.serializeUser(function(user, done) {
-  console.log("Serialized User" + user.id);
+  console.log("Serialized User: " + user.id);
   done(null, user.id);
 });
 
@@ -96,6 +77,25 @@ passport.deserializeUser(function(obj, done) {
   console.log("Deserialized User");
   done(null, obj);
 });
+
+var app = express();
+
+// configure Express
+app.configure(function() {
+  app.set('port', process.env.PORT || 3000);
+  app.set('views', path.join(__dirname, 'views'));
+  app.set('view engine', 'jade');
+  app.use(express.favicon());
+  app.use(express.logger('dev'));
+  app.use(express.json());
+  app.use(express.urlencoded());
+  app.use(express.methodOverride());
+  //app.use(express.session({ secret: 'anything' }));
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use(app.router);
+  app.use(express.static(path.join(__dirname, 'public')));
+}
 
 app.get('/auth/facebook', passport.authenticate('facebook'));
 
