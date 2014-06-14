@@ -97,7 +97,7 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
-app.get('/auth/facebook', passport.authenticate('facebook'));
+app.get('/auth/facebook', passport.authenticate('facebook', { session: true }));
 
 app.get('/auth/facebook/callback', 
 	passport.authenticate('facebook', { successRedirect: '/success', failureRedirect: '/error' }),
