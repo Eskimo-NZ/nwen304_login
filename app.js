@@ -88,7 +88,7 @@ function (accessToken, refreshToken, profile, done) {
 }));
 
 passport.serializeUser(function(user, done) {
-  console.log("Serialized User" + user);
+  console.log("Serialized User" + user.id);
   done(null, user.id);
 });
 
