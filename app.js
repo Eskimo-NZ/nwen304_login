@@ -63,8 +63,9 @@ function (accessToken, refreshToken, profile, done) {
   });
 }));
 
+// Persistent login sessions
 passport.serializeUser(function(user, done) {
-  console.log("Serialized User: " + user.id);
+  console.log("Serialized User");
   done(null, user.id);
 });
 
@@ -88,7 +89,6 @@ app.configure(function() {
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.session({ secret: 'anything' }));
-  
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
@@ -99,22 +99,48 @@ app.configure(function() {
   }
 });
 
+// Facebook authentication starts
 app.get('/auth/facebook', passport.authenticate('facebook'));
 
+// Callback from facebook
 app.get('/auth/facebook/callback', 
 	passport.authenticate('facebook', { successRedirect: '/success', failureRedirect: '/error' })
 );
 
+// Page shown when login succeeds
 app.get('/success', function(req, res){
 	res.send("Success: Logged in with "+req.user);
 });
 
+// Error page if login fails
 app.get('/error', function(req, res){
 	res.send("error logged in");
 });
 
+// Show authentication page
 app.get('/', function(req, res){
   res.sendfile('./views/auth.html');
+});
+
+// Request for a user's data using their id
+app.get('/user/:id', function(req, res){
+  var query = client.query("SELECT * FROM logindatabase");
+  query.on('row', function(row, result) {
+    result.addRow(row);
+  });
+  query.on('end', function(result) {
+    // For every row in the database
+    for(var i = 0; i < result.rows.length; i++){
+      // Check if the id matches the id passed in
+      if(result.rows[i].id == req.params.id){
+        console.log(" + User found at index "+i);
+
+        // Send JSON back to the client
+        res.json(result.rows[i]);
+        break;
+      }
+    }
+  });
 });
 
 http.createServer(app).listen(app.get('port'), function(){
