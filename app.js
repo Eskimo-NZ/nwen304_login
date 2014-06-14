@@ -84,8 +84,11 @@ app.configure(function() {
   app.use(express.logger('dev'));
   app.use(express.json());
   app.use(express.urlencoded());
+  app.use(express.cookieParser());
+  app.use(express.bodyParser());
   app.use(express.methodOverride());
-  //app.use(express.session({ secret: 'anything' }));
+  app.use(express.session({ secret: 'anything' }));
+  
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
