@@ -2,9 +2,35 @@
 <html>
 <head>
 	<title>Login Page</title>
+
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
 </head>
 <body>
 	<h3>Welcome to Node.js Open Auth</h3>
 	<a href="/auth/facebook">SignIn with Facebook</a><br></br>
+
+	<input name="text-1" id="userID" value="1" type="text" />
+	<input type="submit" value="Load User" id="button1" />
+
+	<script type="text/javascript">
+		$(document).bind('pageinit', function() {
+	  		$.ajaxSetup ({
+	    		cache: false
+	  		});
+
+	  		$( "#button1" ).bind( "click", function(event, ui) {
+			var userID = $("#userID").val();
+			var jsonUrl = "http://evening-caverns-1488.herokuapp.com/user/";
+
+			$.get(jsonUrl+userID, function(data) {
+				console.log(data);
+
+				// Save the JSON to localstorage
+		    	localStorage.setItem('newsFeed', JSON.stringify(data));
+			}, 'json');
+  		});
+	</script>
 </body>
 </html>
