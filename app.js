@@ -31,7 +31,7 @@ function (accessToken, refreshToken, profile, done) {
   process.nextTick(function () {
     console.log("User ID: "+profile.id+", Name: "+profile.displayName);
     
-    var query = client.query("SELECT * FROM logindatabase");
+    var query = client.query("SELECT * FROM userdatabase");
     
     query.on('row', function(row, result) {
       result.addRow(row);
@@ -55,7 +55,7 @@ function (accessToken, refreshToken, profile, done) {
       } else {
         console.log(" - Making new user");
         client.query(
-          "INSERT INTO logindatabase (id,username,typeofuser,firstname,points) VALUES ($1,$2,$3,$4,$5)", 
+          "INSERT INTO userdatabase (id,username,typeofuser,firstname,points) VALUES ($1,$2,$3,$4,$5)", 
           [profile.id, 'no username', 'user', profile.givenName, '10']
         );
         return done(null, profile);
@@ -126,7 +126,7 @@ app.get('/', function(req, res){
 
 // Request for a user's data using their id
 app.get('/user/:id', function(req, res){
-  var query = client.query("SELECT * FROM logindatabase");
+  var query = client.query("SELECT * FROM userdatabase");
   query.on('row', function(row, result) {
     result.addRow(row);
   });
