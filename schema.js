@@ -5,12 +5,5 @@ var pg = require('pg').native
 
 client = new pg.Client(connectionString);
 client.connect();
-query = client.query("CREATE TYPE usertype AS ENUM ('user', 'staff');
-	CREATE TABLE userdatabase (
-		id bigint,
-		username text,
-		typeofuser usertype,
-		firstname text,
-		points integer
-	);");
+query = client.query("CREATE TABLE userdatabase (id bigint,username text,typeofuser text,firstname text,points integer)");
 query.on('end', function(result) { client.end(); });
