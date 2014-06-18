@@ -7,7 +7,7 @@ client = new pg.Client(connectionString);
 client.connect();
 query = client.query("
 	CREATE TYPE usertype AS ENUM ('user', 'staff');
-	CREATE TABLE logindatabase (
+	CREATE TABLE userdatabase (
 		id bigint,
 		username text,
 		typeofuser usertype,
