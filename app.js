@@ -145,6 +145,27 @@ app.get('/user/:id', function(req, res){
   });
 });
 
+// Request to verify user id
+app.get('/verifyuser/:id', function(req, res){
+  var query = client.query("SELECT * FROM userdatabase");
+  query.on('row', function(row, result) {
+    result.addRow(row);
+  });
+  query.on('end', function(result) {
+    // For every row in the database
+    for(var i = 0; i < result.rows.length; i++){
+      // Check if the id matches the id passed in
+      if(result.rows[i].id == req.params.id){
+        console.log(" + User found at index "+i);
+
+        // Send JSON back to the client
+        res.json(result.rows[i].id);
+        break;
+      }
+    }
+  });
+});
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
