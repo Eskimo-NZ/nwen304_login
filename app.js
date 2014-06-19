@@ -1,7 +1,4 @@
-/**
- * Module dependencies.
- */
-
+// Module dependencies
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
@@ -10,6 +7,7 @@ var path = require('path');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 
+// Facebook app details
 var FACEBOOK_APP_ID = "566740760110796"
 var FACEBOOK_APP_SECRET = "ae1c43ba534dfdfe394c6e66e08dfcce";
 
@@ -124,29 +122,9 @@ app.get('/', function(req, res){
   res.sendfile('./views/auth.html');
 });
 
-// Request for a user's data using their id
-app.get('/user/:id', function(req, res){
-  var query = client.query("SELECT * FROM userdatabase");
-  query.on('row', function(row, result) {
-    result.addRow(row);
-  });
-  query.on('end', function(result) {
-    // For every row in the database
-    for(var i = 0; i < result.rows.length; i++){
-      // Check if the id matches the id passed in
-      if(result.rows[i].id == req.params.id){
-        console.log(" + User found at index "+i);
-
-        // Send JSON back to the client
-        res.json(result.rows[i]);
-        break;
-      }
-    }
-  });
-});
-
 // Request to verify user id
 app.get('/verifyuser/:id', function(req, res){
+  console.log(" - Client requested user verification");
   var query = client.query("SELECT * FROM userdatabase");
   query.on('row', function(row, result) {
     result.addRow(row);
@@ -166,6 +144,86 @@ app.get('/verifyuser/:id', function(req, res){
   });
 });
 
+// Request for a user's data using their id
+app.get('/user/:id', function(req, res){
+  console.log(" - Client requested user's data");
+  var query = client.query("SELECT * FROM userdatabase");
+  query.on('row', function(row, result) {
+    result.addRow(row);
+  });
+  query.on('end', function(result) {
+    // For every row in the database
+    for(var i = 0; i < result.rows.length; i++){
+      // Check if the id matches the id passed in
+      if(result.rows[i].id == req.params.id){
+        console.log(" + User found at index "+i);
+
+        // Send JSON back to the client
+        res.json(result.rows[i]);
+        break;
+      }
+    }
+  });
+});
+
+// Request all events
+app.get('/events', function(req, res) {
+  console.log(" - Client requested all events");
+  var query = client.query("SELECT * FROM eventsdatabase");
+  query.on('row', function(row, result) {
+    result.addRow(row);
+  });
+  query.on('end', function(result) {
+    // Send JSON back to the client
+    res.json(result.rows);
+    });
+});
+
+// Request the news feed
+app.get('/news', function(req, res) {
+  console.log(" - Client requested the news feed");
+  var query = client.query("SELECT * FROM newsdatabase");
+  query.on('row', function(row, result) {
+    result.addRow(row);
+  });
+  query.on('end', function(result) {
+    // Send JSON back to the client
+    res.json(result.rows);
+    });
+});
+
+// Update the green points of the users
+app.post('/updatepoints/', function(req, res) {
+  console.log(" - Client requested greenpoints to be updated");
+  console.log(req.body);
+  if(!req.body.hasOwnProperty('id') || !req.body.hasOwnProperty('points')) {
+    res.statusCode = 400;
+    return res.send('Error 400: Post Syntax incorrect.');
+  }
+    var query = client.query("SELECT * FROM userdatabase");
+
+    query.on('row', function(result, row) {
+      console.log(result);
+      var personId = req.body.id; // get the person's id 
+      var newPoints = req.body.points; // the new points given 
+      client.query("UPDATE userdatabase SET points = $1 WHERE id = $2", [newPoints, personId]); // update the person's points 
+    });
+});
+
+// Insert events into the database
+app.post('/event', function(req, res) {
+  console.log(" - Client requested an event to be added");
+  console.log(req.body);
+  // This just checks if the title fileds and the description fields are empty. 
+  if(!req.body.hasOwnProperty('title') || !req.body.hasOwnProperty('description')) {
+    res.statusCode = 400;
+    return res.send('Error 400: Post Syntax incorrect.');
+  }
+  // We insert the events into the database 
+    client.query("INSERT INTO eventsdatabase (title, description, longitude, latitude, greenpoints) VALUES ($1, $2, $3, $4, $5)", [req.body.title, req.body.description, req.body.longitude, req.body.latitude, req.body.greenpoints]);
+});
+
+// Listen to the port
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
