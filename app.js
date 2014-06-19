@@ -202,6 +202,20 @@ app.post('/event', function(req, res) {
     client.query("INSERT INTO eventsdatabase (title, description, latitude, longitude, greenpoints) VALUES ($1, $2, $3, $4, $5)", [req.body.title, req.body.description, req.body.latitude, req.body.longitude, req.body.greenpoints]);
 });
 
+// Insert events into the database
+app.post('/news', function(req, res) {
+  console.log(" - Client requested news to be added");
+  console.log(req.body);
+  // This just checks if the title fileds and the description fields are empty. 
+  if(!req.body.hasOwnProperty('name') || !req.body.hasOwnProperty('comment')) {
+    res.statusCode = 400;
+    console.log('Error 400: Post Syntax incorrect.');
+    return res.send('Error 400: Post Syntax incorrect.');
+  }
+  // We insert the events into the database 
+    client.query("INSERT INTO newsdatabase (name, comment) VALUES ($1, $2)", [req.body.name, req.body.comment]);
+});
+
 // Listen to the port
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
