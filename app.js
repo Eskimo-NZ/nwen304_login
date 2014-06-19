@@ -202,7 +202,7 @@ app.post('/event', function(req, res) {
     client.query("INSERT INTO eventsdatabase (title, description, latitude, longitude, greenpoints) VALUES ($1, $2, $3, $4, $5)", [req.body.title, req.body.description, req.body.latitude, req.body.longitude, req.body.greenpoints]);
 });
 
-// Insert events into the database
+// Insert news into the database
 app.post('/news', function(req, res) {
   console.log(" - Client requested news to be added");
   console.log(req.body);
