@@ -195,10 +195,11 @@ app.post('/event', function(req, res) {
   // This just checks if the title fileds and the description fields are empty. 
   if(!req.body.hasOwnProperty('title') || !req.body.hasOwnProperty('description')) {
     res.statusCode = 400;
+    console.log('Error 400: Post Syntax incorrect.');
     return res.send('Error 400: Post Syntax incorrect.');
   }
   // We insert the events into the database 
-    client.query("INSERT INTO eventsdatabase (title, description, longitude, latitude, greenpoints) VALUES ($1, $2, $3, $4, $5)", [req.body.title, req.body.description, req.body.longitude, req.body.latitude, req.body.greenpoints]);
+    client.query("INSERT INTO eventsdatabase (title, description, latitude, longitude, greenpoints) VALUES ($1, $2, $3, $4, $5)", [req.body.title, req.body.description, req.body.latitude, req.body.longitude, req.body.greenpoints]);
 });
 
 // Listen to the port
