@@ -52,6 +52,7 @@ function (accessToken, refreshToken, profile, done) {
         return done(null, profile);
       } else {
         console.log(" - Making new user");
+        console.log(profile);
         client.query(
           "INSERT INTO userdatabase (id,username,typeofuser,firstname,points) VALUES ($1,$2,$3,$4,$5)", 
           [profile.id, 'no username', 'user', profile.givenName, '10']
