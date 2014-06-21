@@ -67,6 +67,8 @@ function (accessToken, refreshToken, profile, done) {
 // Persistent login sessions
 passport.serializeUser(function(user, done) {
   console.log("Serialized User");
+  console.log("first_name: "+user.first_name);
+  console.log("givenName: "+user.givenName);
   done(null, user.id);
 });
 
