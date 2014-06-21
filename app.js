@@ -144,6 +144,19 @@ app.get('/user/:id', function(req, res){
   });
 });
 
+// Request all users
+app.get('/users', function(req, res) {
+  console.log(" * Client requested all users");
+  var query = client.query("SELECT * FROM userdatabase");
+  query.on('row', function(row, result) {
+    result.addRow(row);
+  });
+  query.on('end', function(result) {
+    // Send JSON back to the client
+    res.json(result.rows);
+    });
+});
+
 // Request all events
 app.get('/events', function(req, res) {
   console.log(" * Client requested all events");
@@ -171,7 +184,7 @@ app.get('/news', function(req, res) {
 });
 
 // Update the green points of the users
-app.post('/updatepoints/', function(req, res) {
+app.post('/updatepoints', function(req, res) {
   console.log(" + Client requested greenpoints to be updated");
   console.log(req.body);
   if(!req.body.hasOwnProperty('id') || !req.body.hasOwnProperty('points')) {
