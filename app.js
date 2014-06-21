@@ -51,15 +51,10 @@ function (accessToken, refreshToken, profile, done) {
         console.log(" - User already exists");
         return done(null, profile);
       } else {
-        console.log(" - Making new user");
-        //console.log(profile);
-        console.log(" + Profile first_name: "+profile.first_name);
-        console.log(" + Profile id: "+profile.id);
-        console.log(" + Profile givenName: "+profile.givenName);
-        console.log(" + Profile name: "+profile.displayName);
+        console.log(" + Making new user");
         client.query(
           "INSERT INTO userdatabase (id,username,typeofuser,firstname,points) VALUES ($1,$2,$3,$4,$5)", 
-          [profile.id, 'no username', 'user', profile.first_name, '10']
+          [profile.id, 'no username', 'user', profile.displayName, '10']
         );
         return done(null, profile);
       }
@@ -129,7 +124,7 @@ app.get('/', function(req, res){
 
 // Request for a user's data using their id
 app.get('/user/:id', function(req, res){
-  console.log(" - Client requested user's data");
+  console.log(" * Client requested user's data");
   var query = client.query("SELECT * FROM userdatabase");
   query.on('row', function(row, result) {
     result.addRow(row);
@@ -139,7 +134,7 @@ app.get('/user/:id', function(req, res){
     for(var i = 0; i < result.rows.length; i++){
       // Check if the id matches the id passed in
       if(result.rows[i].id == req.params.id){
-        console.log(" + User found at index "+i);
+        console.log(" * User found at index "+i);
 
         // Send JSON back to the client
         res.json(result.rows[i]);
@@ -151,7 +146,7 @@ app.get('/user/:id', function(req, res){
 
 // Request all events
 app.get('/events', function(req, res) {
-  console.log(" - Client requested all events");
+  console.log(" * Client requested all events");
   var query = client.query("SELECT * FROM eventsdatabase");
   query.on('row', function(row, result) {
     result.addRow(row);
@@ -164,7 +159,7 @@ app.get('/events', function(req, res) {
 
 // Request the news feed
 app.get('/news', function(req, res) {
-  console.log(" - Client requested the news feed");
+  console.log(" * Client requested the news feed");
   var query = client.query("SELECT * FROM newsdatabase");
   query.on('row', function(row, result) {
     result.addRow(row);
@@ -177,7 +172,7 @@ app.get('/news', function(req, res) {
 
 // Update the green points of the users
 app.post('/updatepoints/', function(req, res) {
-  console.log(" - Client requested greenpoints to be updated");
+  console.log(" + Client requested greenpoints to be updated");
   console.log(req.body);
   if(!req.body.hasOwnProperty('id') || !req.body.hasOwnProperty('points')) {
     res.statusCode = 400;
@@ -195,7 +190,7 @@ app.post('/updatepoints/', function(req, res) {
 
 // Insert events into the database
 app.post('/event', function(req, res) {
-  console.log(" - Client requested an event to be added");
+  console.log(" + Client requested an event to be added");
   console.log(req.body);
   // This just checks if the title fileds and the description fields are empty. 
   if(!req.body.hasOwnProperty('title') || !req.body.hasOwnProperty('description')) {
@@ -209,7 +204,7 @@ app.post('/event', function(req, res) {
 
 // Insert news into the database
 app.post('/news', function(req, res) {
-  console.log(" - Client requested news to be added");
+  console.log(" + Client requested news to be added");
   console.log(req.body);
   // This just checks if the title fileds and the description fields are empty. 
   if(!req.body.hasOwnProperty('name') || !req.body.hasOwnProperty('comment')) {
