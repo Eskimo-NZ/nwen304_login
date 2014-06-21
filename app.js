@@ -53,6 +53,7 @@ function (accessToken, refreshToken, profile, done) {
       } else {
         console.log(" - Making new user");
         console.log(profile);
+        console.log("Profile FirstName: "+profile.first_name);
         client.query(
           "INSERT INTO userdatabase (id,username,typeofuser,firstname,points) VALUES ($1,$2,$3,$4,$5)", 
           [profile.id, 'no username', 'user', profile.first_name, '10']
@@ -67,8 +68,6 @@ function (accessToken, refreshToken, profile, done) {
 // Persistent login sessions
 passport.serializeUser(function(user, done) {
   console.log("Serialized User");
-  console.log("first_name: "+user.first_name);
-  console.log("givenName: "+user.givenName);
   done(null, user.id);
 });
 
