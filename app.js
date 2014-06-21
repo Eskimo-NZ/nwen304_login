@@ -53,8 +53,8 @@ function (accessToken, refreshToken, profile, done) {
       } else {
         console.log(" + Making new user");
         client.query(
-          "INSERT INTO userdatabase (id,username,typeofuser,fullname,points) VALUES ($1,$2,$3,$4,$5)", 
-          [profile.id, 'no username', 'user', profile.displayName, '10']
+          "INSERT INTO userdatabase (id,typeofuser,fullname,points) VALUES ($1,$2,$3,$4,$5)", 
+          [profile.id, 'user', profile.displayName, '10']
         );
         return done(null, profile);
       }
