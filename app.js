@@ -52,10 +52,11 @@ function (accessToken, refreshToken, profile, done) {
         return done(null, profile);
       } else {
         console.log(" - Making new user");
-        console.log(profile);
+        //console.log(profile);
         console.log(" + Profile first_name: "+profile.first_name);
         console.log(" + Profile id: "+profile.id);
         console.log(" + Profile givenName: "+profile.givenName);
+        console.log(" + Profile name: "+profile.displayName);
         client.query(
           "INSERT INTO userdatabase (id,username,typeofuser,firstname,points) VALUES ($1,$2,$3,$4,$5)", 
           [profile.id, 'no username', 'user', profile.first_name, '10']
