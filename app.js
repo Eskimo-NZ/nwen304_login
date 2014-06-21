@@ -55,7 +55,7 @@ function (accessToken, refreshToken, profile, done) {
         console.log(profile);
         client.query(
           "INSERT INTO userdatabase (id,username,typeofuser,firstname,points) VALUES ($1,$2,$3,$4,$5)", 
-          [profile.id, 'no username', 'user', profile.givenName, '10']
+          [profile.id, 'no username', 'user', profile.first_name, '10']
         );
         return done(null, profile);
       }
