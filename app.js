@@ -109,7 +109,7 @@ app.get('/auth/facebook/callback',
 
 // Page shown when login succeeds
 app.get('/success', function(req, res){
-	res.send("Success: Logged in with "+req.user);
+	res.send("<br><h3>Copy the code, and paste it into the app.</h3><br>"+req.user);
 });
 
 // Error page if login fails
