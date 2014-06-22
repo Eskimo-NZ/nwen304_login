@@ -219,12 +219,6 @@ app.post('/event', function(req, res) {
 app.post('/news', function(req, res) {
   console.log(" + Client requested news to be added");
   console.log(req.body);
-  // This just checks if the title fileds and the description fields are empty. 
-  if(!req.body.hasOwnProperty('name') || !req.body.hasOwnProperty('comment')) {
-    res.statusCode = 400;
-    console.log('Error 400: Post Syntax incorrect.');
-    return res.send('Error 400: Post Syntax incorrect.');
-  }
   // We insert the events into the database 
     client.query("INSERT INTO newsdatabase (name, comment) VALUES ($1, $2)", [req.body.name, req.body.comment]);
 });
