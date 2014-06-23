@@ -196,7 +196,7 @@ app.post('/updatepoints', function(req, res) {
     result.addRow(row);
   });  
 
-  query.on('end', function(result, row) {
+  query.on('end', function(result) {
     var personId = req.body.id; // get the person's id 
     var newPoints = req.body.points; // the new points given 
     for(var i = 0; i < result.rows.length; i++){
