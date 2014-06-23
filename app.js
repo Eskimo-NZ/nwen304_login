@@ -187,18 +187,26 @@ app.get('/news', function(req, res) {
 app.post('/updatepoints', function(req, res) {
   console.log(" + Client requested greenpoints to be updated");
   console.log(req.body);
-  if(!req.body.hasOwnProperty('id') || !req.body.hasOwnProperty('points')) {
+  if(!req.body.hasOwnProperty('id') || !req.body.hasOwnProperty('points') || !req.body.points === "") {
     res.statusCode = 400;
     return res.send('Error 400: Post Syntax incorrect.');
   }
-    var query = client.query("SELECT * FROM userdatabase");
+  var query = client.query("SELECT * FROM userdatabase");
 
-    query.on('row', function(result, row) {
-      console.log(result);
-      var personId = req.body.id; // get the person's id 
-      var newPoints = req.body.points; // the new points given 
-      client.query("UPDATE userdatabase SET points = $1 WHERE id = $2", [newPoints, personId]); // update the person's points 
-    });
+  query.on('row', function(result, row) {
+    var personId = req.body.id; // get the person's id 
+    var newPoints = req.body.points; // the new points given 
+    for(var i = 0; i < result.rows.length; i++){
+      // Check if the id matches the id passed in
+      if(result.rows[i].id == personId){
+        console.log(" * User found at index "+i);
+        client.query("UPDATE userdatabase SET points = $1 WHERE id = $2", [newPoints, personId]); // update the person's points 
+        return;
+      }
+    }
+    res.statusCode = 400;
+    return res.send('Error 400: Post Syntax incorrect.');    
+  });
 });
 
 // Insert events into the database
