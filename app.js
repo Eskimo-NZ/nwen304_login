@@ -192,8 +192,11 @@ app.post('/updatepoints', function(req, res) {
     return res.send('Error 400: Post Syntax incorrect.');
   }
   var query = client.query("SELECT * FROM userdatabase");
+  query.on('row', function(row, result) {
+    result.addRow(row);
+  });  
 
-  query.on('row', function(result, row) {
+  query.on('end', function(result, row) {
     var personId = req.body.id; // get the person's id 
     var newPoints = req.body.points; // the new points given 
     for(var i = 0; i < result.rows.length; i++){
