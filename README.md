@@ -1,4 +1,4 @@
-#Server-Side code for NWEN304 Group Project
+#Server-Side for NWEN304 Group Project
 
 This repository has the same contents as our application server (Heroku)
 http://evening-caverns-1488.herokuapp.com/
