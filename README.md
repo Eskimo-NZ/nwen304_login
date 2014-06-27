@@ -5,7 +5,7 @@ http://evening-caverns-1488.herokuapp.com/
 
 ###Contributions
 
-**Facebook Login (Including Callback Pages)** - Alex Candler
+Facebook Login (Including Callback Pages) - Alex Candler
 
 **GET**
 
